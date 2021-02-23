@@ -1,7 +1,7 @@
 from socket import *
 
 
-def smtp_client(port=1025, mailserver='127.0.0.1'):
+def smtp_client(port=1025, mailserver = '127.0.0.1'):
     msg = "\r\n My message"
     endmsg = "\r\n.\r\n"
 
@@ -30,29 +30,36 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
 
     # Send MAIL FROM command and print server response.
     # Fill in start
-    clientSocket.sendmsg(mailserver,port, msg)
+    mailfromCommand = 'MAIL FROM: '
+    clientSocket.send(mailfromCommand.encode())
     # Fill in end
 
     # Send RCPT TO command and print server response.
     # Fill in start
-    clientSocket.recvmsg()
+    rcptCommand = 'RPCT TO: '
+    clientSocket.send(rcptCommand.encode())
     # Fill in end
 
     # Send DATA command and print server response.
     # Fill in start
-    clientSocket.sendfile()
+    dataCommand = 'DATA: \r\n.\r\n'
+    clientSocket.send(dataCommand.encode())
     # Fill in end
 
     # Send message data.
     # Fill in start
+    clientSocket.send(msg.encode())
     # Fill in end
 
     # Message ends with a single period.
     # Fill in start
+    clientSocket.send(endmsg.encode())
     # Fill in end
 
     # Send QUIT command and get server response.
     # Fill in start
+    quitCommand = 'QUIT: \r\n'
+    clientSocket.send(quitCommand)
     # Fill in end
 
 
