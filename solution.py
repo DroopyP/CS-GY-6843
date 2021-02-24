@@ -1,48 +1,92 @@
-# CS-GY6843
-# welcome_assignment_answers
-# Input - All eight questions given in the assignment.
-# Output - The right answer for the specific question.
+from socket import *
 
 
-def welcome_assignment_answers(question):
-    global answer
-    if question == "Are encoding and encryption the same? - Yes/No":
-        answer = "No"
-    elif question == "Is it possible to decrypt a message without a key? - Yes/No":
-        answer = "No"
-    elif question == "Is it possible to decode a message without a key? - Yes/No":
-        answer = "Yes"
-    elif question == "Is a hashed message supposed to be un-hashed? - Yes/No":
-        answer = "No"
-    elif question == "What is the MD5 hashing value to the following message: 'NYU Computer Networking' - Use MD5 " \
-                     "hash generator and use the answer in your code":
-        answer = "42b76fe51778764973077a5a94056724"
-    elif question == "Is MD5 a secured hashing algorithm? - Yes/No":
-        answer = "No"
-    elif question == "What layer from the TCP/IP model does the protocol DHCP belongs to? - The answer should be a " \
-                     "numeric number":
-        answer = 3
-    elif question == "What layer of the TCP/IP model the protocol TCP belongs to? - The answer should be a numeric " \
-                     "number":
-        answer = 4
-    else:
-        answer =5
-    return answer
+def smtp_client(port=1025, mailserver='127.0.0.1'):
+    msg = "\r\n My message"
+    endmsg = "\r\n.\r\n"
+
+    # Choose a mail server (e.g. Google mail server) if you want to verify the script beyond GradeScope
+
+    # Create socket called clientSocket and establish a TCP connection with mailserver and port
+
+    # Fill in start
+    clientSocket = socket(AF_INET, SOCK_STREAM)
+    clientSocket.bind((mailserver, port))
+    clientSocket.listen(5)
+    # Fill in end
+
+    recv = clientSocket.recv(1024).decode()
+    #print(recv)
+    #if recv[:3] != '220':
+        #print('220 reply not received from server.')
+
+    # Send HELO command and print server response.
+    heloCommand = 'HELO Alice\r\n'
+    clientSocket.send(heloCommand.encode())
+    recv = clientSocket.recv(1024).decode()
+    #print(recv)
+    #if recv[:3] != '220':
+        #print('220 reply not received from server.')
+
+    # Send MAIL FROM command and print server response.
+    # Fill in start
+    mailfromCommand = 'MAIL FROM: '
+    clientSocket.send(mailfromCommand.encode())
+    recv = clientSocket.recv(1024).decode()
+    #print(recv)
+    #if recv[:3] != '220':
+        #print('220 reply not received from server.')
+    # Fill in end
+
+    # Send RCPT TO command and print server response.
+    # Fill in start
+    rcptCommand = 'RPCT TO: '
+    clientSocket.send(rcptCommand.encode())
+    recv = clientSocket.recv(1024).decode()
+    #print(recv)
+    #if recv[:3] != '220':
+        #print('220 reply not received from server.')
+    # Fill in end
+
+    # Send DATA command and print server response.
+    # Fill in start
+    dataCommand = 'DATA: Hello World'
+    clientSocket.send(dataCommand.encode())
+    recv = clientSocket.recv(1024).decode()
+    #print(recv)
+    #if recv[:3] != '220':
+        #print('220 reply not received from server.')
+    # Fill in end
+
+    # Send message data.
+    # Fill in start
+    clientSocket.send(msg.encode())
+    recv = clientSocket.recv(1024).decode()
+    #print(recv)
+    #if recv[:3] != '220':
+       # print('220 reply not received from server.')
+    # Fill in end
+
+    # Message ends with a single period.
+    # Fill in start
+    clientSocket.send(endmsg.encode())
+    recv = clientSocket.recv(1024).decode()
+    #print(recv)
+    #if recv[:3] != '220':
+        #print('220 reply not received from server.')
+    # Fill in end
+
+    # Send QUIT command and get server response.
+    # Fill in start
+    quitCommand = 'QUIT: \r\n'
+    clientSocket.send(quitCommand)
+    recv = clientSocket.recv(1024).decode()
+    #print(recv)
+    #if recv[:3] != '220':
+        #print('220 reply not received from server.')
+    clientSocket.close()
+    # Fill in end
 
 
-# Complete all the questions.
-
-
-if __name__ == "__main__":
-    # use this space to debug and verify that the program works
-    debug_question = "Are encoding and encryption the same? - Yes/No"
-    print(welcome_assignment_answers(debug_question))
-
-
-# Complete all the questions.
-
-
-if __name__ == "__main__":
-    # use this space to debug and verify that the program works
-    debug_question = "Are encoding and encryption the same? - Yes/No"
-    print(welcome_assignment_answers(debug_question))
+if __name__ == '__main__':
+    smtp_client(1025, '127.0.0.1')
