@@ -1,4 +1,4 @@
-﻿from socket import *
+from socket import *
 import os
 import sys
 import struct
@@ -70,21 +70,15 @@ def build_packet():
     header = struct.pack("bbHHh", ICMP_ECHO_REQUEST, 0, myChecksum, ID, 1)
     packet = header + data
 
-    return packet
     # Make the header in a similar way to the ping exercise.
     # Append checksum to the header.
-
-
     # Don’t send the packet yet , just return the final packet in this function.
     #Fill in end
 
-
     # So the function ending should look like this
-
 
     packet = header + data
     return packet
-
 
 def get_route(hostname):
     timeLeft = TIMEOUT
@@ -170,4 +164,8 @@ def get_route(hostname):
                 break
             finally:
                 mySocket.close()
-    # Fill in start
+
+if __name__ == '__main__':
+    # ping("192.168.1.200")
+    get_route("127.0.0.1")
+    # ping("google.co.il")
