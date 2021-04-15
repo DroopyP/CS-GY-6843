@@ -47,8 +47,8 @@ def build_packet():
     #Fill in start
     # In the sendOnePing() method of the ICMP Ping exercise ,firstly the header of our
     # packet to be sent was made, secondly the checksum was appended to the header and
-    # then finally the complete packet was sent to the destination.
-    # Header is type (8), code (8), checksum (16), id (16), sequence (16)
+
+
 
     myChecksum = 0
     # Make a dummy header with a 0 checksum
@@ -76,6 +76,7 @@ def build_packet():
     #Fill in end
 
     # So the function ending should look like this
+    # then finally the complete packet was sent to the destination.
 
     packet = header + data
     return packet
@@ -94,6 +95,14 @@ def get_route(hostname):
             #Fill in start
             # Make a raw socket named mySocket
             mySocket = socket(AF_INET, SOCK_STREAM)
+
+            myID = os.getpid() & 0xFFFF  # Return the current process i
+            mySocket.sendto(mySocket, destAddr, myID)
+            response = receiveOnePing(mySocket, myID, timeout, destAddr)
+            mySocket.close()
+            print(response)
+            return response
+
             #Fill in end
 
 
@@ -129,8 +138,15 @@ def get_route(hostname):
             else:
                 # Fill in start
                 # Fetch the icmp type from the IP packet
+                ipHeader = recPacket[:20]
+                iphVersion, iphTypeOfSvc, iphLength, iphID, iphFlags, iphTTL, iphProtocol, iphChecksum, iphSrcIP, iphDestIP = struct.unpack("!BBHHHBBHII", ipHeader)
+
+                icmp_header = recPacket[20:28]
+                icmp_type, code, checksum, id, seq = struct.unpack('bbHHh', icmp_header)
+                print(icmp_type)
                 # Fill in end
                 try: # try to fetch the hostname
+                    mySocket.gethostname(hostname)
                     # Fill in end
                 except herror:   #if the host does not provide a hostname
                     # Fill in start
@@ -144,28 +160,34 @@ def get_route(hostname):
                                                                 bytes])[0]
                     #Fill in start
                     #You should add your responses to your lists here
+                    tracelist1.append(icmp_type, iphTTL)
                     #Fill in end
                 elif types == 3:
                     bytes = struct.calcsize("d")
                     timeSent = struct.unpack("d", recvPacket[28:28 + bytes])[0]
                     #Fill in start
                     #You should add your responses to your lists here
+                    tracelist1.append(icmp_type, iphTTL)
                     #Fill in end
                 elif types == 0:
                     bytes = struct.calcsize("d")
                     timeSent = struct.unpack("d", recvPacket[28:28 + bytes])[0]
                     #Fill in start
                     #You should add your responses to your lists here and return your list if your destination IP is met
+                    tracelist1.append(icmp_type, iphTTL)
+                    tracelist2.append(tracelist1)
+                    return(tracelist2)
                     #Fill in end
                 else:
                 # Fill in start
+                    print("If there is an exception/error to your if statements, you should append that to your list here")
                 # If there is an exception/error to your if statements, you should append that to your list here
-                #Fill in end
+                # Fill in end
                 break
             finally:
                 mySocket.close()
 
 if __name__ == '__main__':
-    # ping("192.168.1.200")
-    get_route("127.0.0.1")
-    # ping("google.co.il")
+    # get_route("192.168.1.200")
+    # get_route("127.0.0.1")
+    get_route("google.co.il")
